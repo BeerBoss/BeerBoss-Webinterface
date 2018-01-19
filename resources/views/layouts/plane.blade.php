@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="{{asset('assets/ionicons/css/ionicons.min.css')}}">
         <link rel="stylesheet" href="{{asset('assets/adminlte/css/AdminLTE.min.css')}}">
         <link rel="stylesheet" href="{{asset('assets/adminlte/css/skins/skin-yellow.min.css')}}">
+        @yield('css')
         <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     </head>
     <body class="hold-transition skin-yellow sidebar-mini">
