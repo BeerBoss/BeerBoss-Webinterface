@@ -9,7 +9,7 @@
         </div>
         <!-- /.login-logo -->
         <div class="login-box-body">
-            <p class="login-box-msg">Change your password</p>f
+            <p class="login-box-msg">Change your password</p>
             <form class="form-horizontal" method="POST" action="{{ route('password.request') }}">
                 {{ csrf_field() }}
                 <input type="hidden" name="token" value="{{ $token }}">

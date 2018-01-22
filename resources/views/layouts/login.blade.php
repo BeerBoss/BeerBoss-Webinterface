@@ -3,6 +3,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>BeerBoss - Login</title>
+    <link rel="shortcut icon" href="{{asset('assets/beerboss/img/beerglass.png')}}" />
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/font-awesome/css/font-awesome.min.css')}}">
@@ -12,7 +13,7 @@
     @yield('css')
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition skin-yellow login-page">
 @yield('body')
 
 <script src="{{asset('assets/jquery/js/jquery.min.js')}}"></script>
