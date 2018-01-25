@@ -15,9 +15,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         Schema::defaultStringLength(191);
         if (DB::connection() instanceof \Illuminate\Database\SQLiteConnection) {
-            DB::statement(DB::raw('PRAGMA foreign_keys=1'));
+            DB::statement(DB::raw('PRAGMA foreign_keys=1; PRAGMA auto_vacuum = "1";'));
         }
     }
 

@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="box">
-                    <div class="box-header with-borders">
+                    <div class="box-header with-border">
                         <h3 class="box-title">Temperatuur grafiek</h3>
                     </div>
                     <div class="box-body">
@@ -18,16 +18,24 @@
 @stop
 @section('javascript')
 <script>
+    /*function wait(ms){
+        var start = new Date().getTime();
+        var end = start;
+        while(end < start + ms) {
+            end = new Date().getTime();
+        }
+    }
     var app = new Vue({
         el: '#vue',
         data: {
-            'preppedData': {},
+            'preppedData': null,
+            'chart': null,
+
         },
         methods: {
             getData(){
                 this.$http.get('{{route('sensordata.index')}}').then(response => {
                     this.prepData(response.body);
-                    this.drawChart()
                 });
             },
             prepData(data){
@@ -45,9 +53,9 @@
                 }];
             },
             drawChart(){
-                var chart = new Chart(document.getElementById("tempChart"), {
+                this.chart = new Chart(document.getElementById("tempChart"), {
                     type: 'line',
-                    data: this.preppedData,
+                    data: null,
                     options: {
                         title: {
                             display: true,
@@ -55,14 +63,16 @@
                         }
                     }
                 });
+            },
+            updateData(){
+                this.chart.data = this.preppedData;
+                this.chart.update(0);
             }
         },
         mounted: function () {
             this.getData();
-            setInterval(function () {
-                this.getData();
-            }.bind(this), 30000);
+            this.drawChart();
         }
-    });
+    });*/
 </script>
 @stop

@@ -2,7 +2,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>BeerBoss</title>
+        <title>BeerBoss - @yield('header')</title>
         <link rel="shortcut icon" href="{{asset('assets/beerboss/img/beerglass.png')}}" />
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap.min.css')}}">
@@ -23,7 +23,9 @@
         <script src="{{asset('assets/chartjs/js/Chart.bundle.min.js')}}"></script>
         <script src="{{asset('assets/vue/js/vue.js')}}"></script>
         <script src="{{asset('assets/vue-resource/js/vue-resource.js')}}"></script>
+        <script src="{{asset('assets/vue/js/vue-chartjs.min.js')}}"></script>
         <script src="{{asset('assets/lodash/js/lodash.min.js')}}"></script>
+        <script src="{{asset('assets/beerboss/js/main.js')}}"></script>
         @yield('javascript')
     </body>
 </html>

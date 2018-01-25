@@ -13,4 +13,4 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::resource('sensordata', 'SensorDataController');
+Route::resource('sensordata', 'SensorDataController')->middleware('auth.basic');

@@ -78,6 +78,13 @@
 
                 <!-- Sidebar Menu -->
                 <ul class="sidebar-menu" data-widget="tree">
+                    <li><a href="{{route('home')}}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+                    <li class="header">Stats</li>
+                    <li><a href="{{route('tempStats')}}"><i class="fa fa-line-chart"></i><span>Temperature stats</span></a></li>
+                    <li><a href="{{route('connStats')}}"><i class="fa fa-plug"></i><span>Connection stats</span></a></li>
+                    <li class="header">Actions</li>
+                    <li><a href="{{route('manageProfiles')}}"><i class="fa fa-thermometer-empty"></i><span>Manage profiles</span></a></li>
+                    <li class="header">Settings</li>
                 </ul>
                 <!-- /.sidebar-menu -->
             </section>
@@ -112,7 +119,7 @@
         </footer>
 
         <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
+        <aside class="control-sidebar control-sidebar-dark" id="vue-sidebar">
             <!-- Create the tabs -->
             <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
                 <li class="active"><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
@@ -121,21 +128,29 @@
             <div class="tab-content">
                 <!-- Settings tab content -->
                 <div class="tab-pane active" id="control-sidebar-home-tab">
-                    <form method="post">
-                        <h3 class="control-sidebar-heading">General Settings</h3>
-
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">
-                                Report panel usage
-                                <input type="checkbox" class="pull-right" checked>
-                            </label>
-
-                            <p>
-                                Some information about this general settings option
-                            </p>
-                        </div>
-                        <!-- /.form-group -->
-                    </form>
+                    <h3 class="control-sidebar-heading">Connection status</h3>
+                    <p>
+                        <b>@{{ connInfo.hostname }} </b>(<span v-html="status"></span>)<br>
+                         @{{ connInfo.ip }}
+                    </p>
+                    <h3 class="control-sidebar-heading">Temperature status</h3>
+                    <p v-if="online">
+                        Fridge temperature: @{{ lastTemp.fridgeTemp }} <br>
+                        Barrel temperature: @{{ lastTemp.barrelTemp }}
+                    </p>
+                    <p v-else>
+                        Fridge not online!
+                    </p>
+                    <h3 class="control-sidebar-heading">Beer profile Status</h3>
+                    <p v-if="activeProfile">
+                        <b>@{{ activeProfile.name }} </b><br>
+                        Date started: @{{ activeProfile.dateStarted }}<br>
+                        Current day: @{{ activeProfileDay }}<br>
+                        Current temperature: @{{ activeProfilePart.desiredTemp }}
+                    </p>
+                    <p v-else>
+                        No active profile setup yet.
+                    </p>
                 </div>
                 <!-- /.tab-pane -->
             </div>
@@ -145,4 +160,9 @@
         immediately after the control sidebar -->
         <div class="control-sidebar-bg"></div>
     </div>
+    <script>
+        var connInfoUrl = '{{route('getConnStats')}}';
+        var activeProfileUrl = '{{route('getActiveProfile')}}';
+        var lastTempUrl = '{{route('getLastTemp')}}';
+    </script>
 @stop
