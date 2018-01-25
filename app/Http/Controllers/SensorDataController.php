@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\SensorData;
+use Illuminate\Support\Facades\Auth;
 
 class SensorDataController extends Controller
 {
@@ -16,6 +17,7 @@ class SensorDataController extends Controller
         $data = new SensorData();
         $data->fill($request->toArray());
         $data->recordStamp = Carbon::now();
+        $data->user()->associate(Auth::user());
         $data->save();
         return response($data,201);
 
