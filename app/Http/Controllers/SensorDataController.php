@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\SensorData;
-use App\Connection;
 use Illuminate\Support\Facades\Auth;
 
 class SensorDataController extends Controller
@@ -14,13 +13,18 @@ class SensorDataController extends Controller
         return Auth::user()->SensorData()->get();
     }
 
+    //This function will be two functions in one. It will post the sensordata into the database, but it will also return the active profile
     public function store(Request $request){
         Auth::user()->updateConnInfo($request->connData);
         $data = new SensorData();
         $data->fill($request->tempData);
         $data->recordStamp = Carbon::now();
         Auth::user()->SensorData()->save($data);
-        return response($data,201);
+
+        //Now it will get the active profile part and send this back
+        $profile = Auth::user()->BeerProfiles()->whereNotNull('dateStarted')->first();
+        if($profile) return $profile->getActivePart();
+        else return null;
 
     }
 
@@ -42,6 +46,16 @@ class SensorDataController extends Controller
     }
 
     public function getDailyTemps(){
-        return Auth::user()->SensorData()->where('recordStamp','>',Carbon::now()->format('yyyy-mm-dd'))->get();
+        $allTemps = Auth::user()->SensorData()->whereDate('recordStamp','>=', date('Y-m-d'))->get();
+        $collLength = $allTemps->count();
+        $dataArray = collect();
+        $lastInsert = 0;
+        for($i = 0; $i < $collLength; $i++){
+            if($i > $lastInsert + 12){
+                $dataArray->push($allTemps[$i]);
+                $lastInsert = $i;
+            }
+        }
+        return $dataArray;
     }
 }

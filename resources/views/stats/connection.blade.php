@@ -97,12 +97,12 @@
                                 <input type="text" id="lcdAddress" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="sensorFridgePin">Fridge sensor pin: </label>
-                                <input type="text" id="sensorFridgePin" class="form-control">
+                                <label for="sensorFridgePin">Fridge sensor address: </label>
+                                <input type="text" id="sensorFridgeAddress" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="sensorBarrelPin">Barrel sensor pin: </label>
-                                <input type="text" id="sensorBarrelPin" class="form-control">
+                                <label for="sensorBarrelPin">Barrel sensor address: </label>
+                                <input type="text" id="sensorBarrelAddress" class="form-control">
                             </div>
                             <h4>Web settings (user has to exist)</h4>
                             <div class="form-group">
@@ -133,8 +133,8 @@
                 "cooler_relayPin = " + $("#coolerRelayPin").val() +
                 "\nheater_relayPin = " + $("#heaterRelayPin").val() +
                 "\nlcd_i2c_addr = " + $("#lcdAddress").val() +
-                "\nsensorFridgePin = " + $("#sensorFridgePin").val() +
-                "\nsensorBarrelPin = " + $("#sensorBarrelPin").val() +
+                "\nsensorFridgeAddress = " + $("#sensorFridgeAddress").val() +
+                "\nsensorBarrelAddress = " + $("#sensorBarrelAddress").val() +
                 "\nemail = '" + $("#email").val() +
                 "'\npassword = '" + $("#password").val() +
                 "'\nwebAddress = '" + $("#webAddress").val() + "'\n";
@@ -167,7 +167,7 @@
                 this.getConnInfo();
                 setInterval(function () {
                     this.getConnInfo();
-                }.bind(this), 5000);
+                }.bind(this), 1000);
             }
         });
     </script>

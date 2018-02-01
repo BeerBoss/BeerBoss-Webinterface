@@ -32,6 +32,7 @@ class ProfileController extends Controller
     {
         return Auth::user()->BeerProfiles()->with('BeerProfileData')->whereNotNull('dateStarted')->first();
     }
+
     public function getActiveTemperature(){
         return Auth::user()->BeerProfiles()->whereNotNull('dateStarted')->first()->getActivePart();
     }

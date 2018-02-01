@@ -13,7 +13,7 @@
     @yield('css')
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition skin-yellow login-page">
+<body class="hold-transition login-page">
 @yield('body')
 
 <script src="{{asset('assets/jquery/js/jquery.min.js')}}"></script>

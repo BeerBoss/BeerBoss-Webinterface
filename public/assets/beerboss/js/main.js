@@ -43,14 +43,18 @@ var sidebar = new Vue({
             return (moment().diff(moment(this.connInfo.updated_at), 'seconds') <= 15)
         },
         activeProfilePart(){
-            var searchDay = 0;
-            var currentDay = this.activeProfileDay;
-            for(i=0; i < this.activeProfile.beer_profile_data.length; i++){
-                searchDay += +this.activeProfile.beer_profile_data[i].amountDays;
-                if(currentDay < searchDay){
-                    return this.activeProfile.beer_profile_data[i];
+
+            if(this.activeProfile){
+                var searchDay = 0;
+                var currentDay = this.activeProfileDay;
+                for(i=0; i < this.activeProfile.beer_profile_data.length; i++){
+                    searchDay += +this.activeProfile.beer_profile_data[i].amountDays;
+                    if(currentDay <= searchDay){
+                        return this.activeProfile.beer_profile_data[i];
+                    }
                 }
             }
+
         },
         activeProfileDay(){
             return moment().diff(this.activeProfile.dateStarted, 'days')+1;

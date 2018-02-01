@@ -9,7 +9,7 @@
                         <h3 class="box-title">Current temperatures</h3>
                     </div>
                     <div class="box-body">
-                        <div class="row">
+                        <div class="row" v-if="online">
                             <div class="col-lg-6">
                                 <div class="description-block border-right">
                                     <span v-html="fridgePercOffHtml"></span>
@@ -23,6 +23,11 @@
                                     <h1>@{{ lastTemp.barrelTemp }}</h1>
                                     <span class="description-text">Barrel temperature</span>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row" v-else>
+                            <div class="col-lg-12">
+                                <div class="alert alert-warning">No live data available. Make a connection!</div>
                             </div>
                         </div>
                         <div class="row">
@@ -85,10 +90,10 @@
             <div class="col-lg-12">
                 <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Daily temperature graph</h3>
+                        <h3 class="box-title">Daily temperature graph (Does not update)</h3>
                     </div>
                     <div class="box-body">
-
+                        <canvas id="dailyTemperatureGraph" width="500px" height="400px"></canvas>
                     </div>
                 </div>
             </div>
@@ -101,6 +106,7 @@
             'el': '#vue',
             'data': {
                 'chart': null,
+                'dailyChart': null,
                 'lastTemp': '',
                 'dailyTemps': [],
                 'activeProfile': '',
@@ -110,10 +116,10 @@
             'methods': {
                 updateCharts(){
                     if(sidebar.online){
-                        this.chart.data.labels.push(moment().format('hh:mm:ss'));
+                        this.chart.data.labels.push(moment().format('HH:mm:ss'));
                         this.chart.data.datasets[0].data.push(this.lastTemp.fridgeTemp);
                         this.chart.data.datasets[1].data.push(this.lastTemp.barrelTemp);
-                        this.chart.data.datasets[2].data.push(sidebar.activeProfilePart.desiredTemp);
+                        if(sidebar.activeProfile) this.chart.data.datasets[2].data.push(sidebar.activeProfilePart.desiredTemp);
                         this.chart.update();
                     }
                 },
@@ -123,17 +129,64 @@
                 getDailyTemps(){
                     this.$http.get('{{route('getDailyTemps')}}').then(response => {
                         this.dailyTemps = response.body;
+                        this.dailyChart = new Chart(document.getElementById("dailyTemperatureGraph"), {
+                            type: 'line',
+                            data: {
+                                labels: this.dailyTemps.map(function(x){ return moment(x.recordStamp).format('HH:mm:ss') }),
+                                datasets: [{
+                                    data: this.dailyTemps.map(function(x){ return x.fridgeTemp }),
+                                    label: 'Fridge temperature',
+                                    borderColor: "#4842f4",
+                                    fill: false,
+                                }, {
+                                    data: this.dailyTemps.map(function(x){ return x.barrelTemp }),
+                                    label: 'Barrel temperature',
+                                    borderColor: "#8e5ea2",
+                                    fill: false,
+                                }],
+                            },
+                            options: {
+                                title: {
+                                    display: true,
+                                    text: 'Daily temperature graph'
+                                },
+                                scales: {
+                                    yAxes: [{
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Temperature'
+                                        },
+                                        ticks: {
+                                            stepSize: 2,
+                                            beginAtZero:true,
+                                            suggestedMax: 25,
+                                            suggestedMin: 10,
+                                        }
+                                    }],
+                                    xAxes: [{
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Time in seconds',
+                                        }
+                                    }]
+                                }
+                            }
+                        });
                     })
                 },
                 getActiveProfile(){
-                    this.activeProfile = sidebar.activeProfile;
+                    if(sidebar.activeProfile)
+                        this.activeProfile = sidebar.activeProfile;
                 },
                 getPercentages(){
-                    var desiredTemp = +sidebar.activeProfilePart.desiredTemp;
-                    var temp = +this.lastTemp.barrelTemp;
-                    this.barrelPercOff = Math.round(((temp-desiredTemp)/((temp+desiredTemp)/2))*10000)/100;
-                    temp = +this.lastTemp.fridgeTemp;
-                    this.fridgePercOff = Math.round(((temp-desiredTemp)/((temp+desiredTemp)/2))*10000)/100;
+                    if(sidebar.activeProfile){
+                        var desiredTemp = +sidebar.activeProfilePart.desiredTemp;
+                        var temp = +this.lastTemp.barrelTemp;
+                        this.barrelPercOff = Math.round(((temp-desiredTemp)/((temp+desiredTemp)/2))*10000)/100;
+                        temp = +this.lastTemp.fridgeTemp;
+                        this.fridgePercOff = Math.round(((temp-desiredTemp)/((temp+desiredTemp)/2))*10000)/100;
+                    }
+
                 },
                 drawCharts(){
                     this.chart = new Chart(document.getElementById("temperatureGraph"), {
@@ -228,19 +281,23 @@
                     var smallest = 999;
                     this.dailyTemps.map(function(x){smallest = Math.min(smallest, +x.barrelTemp)});
                     return smallest;
-                }
+                },
+                online(){
+                    return (moment().diff(moment(sidebar.connInfo.updated_at), 'seconds') <= 15)
+                },
             },
             mounted(){
-                this.drawCharts();
+                this.getDailyTemps();
                 this.getLastTemp();
                 this.getActiveProfile();
-                this.getDailyTemps();
+                this.drawCharts();
                 setInterval(function () {
                     this.getLastTemp();
                     this.getActiveProfile();
-                    this.updateCharts();
                     this.getPercentages();
-                    this.getDailyTemps();
+                }.bind(this), 1000);
+                setInterval(function() {
+                    this.updateCharts();
                 }.bind(this), 5000);
             }
 
