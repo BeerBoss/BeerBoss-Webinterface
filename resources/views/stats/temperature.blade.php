@@ -124,7 +124,12 @@
                     }
                 },
                 getLastTemp(){
-                    this.lastTemp = sidebar.lastTemp;
+                    if(sidebar.lastTemp !== ''){
+                        this.lastTemp = sidebar.lastTemp;
+                    }else{
+                        this.lastTemp = {'fridgeTemp': 0, 'barrelTemp': 0}
+                    }
+
                 },
                 getDailyTemps(){
                     this.$http.get('{{route('getDailyTemps')}}').then(response => {
@@ -287,8 +292,8 @@
                 },
             },
             mounted(){
-                this.getDailyTemps();
                 this.getLastTemp();
+                this.getDailyTemps();
                 this.getActiveProfile();
                 this.drawCharts();
                 setInterval(function () {
