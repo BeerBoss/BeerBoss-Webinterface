@@ -9,7 +9,7 @@
                         <h3 class="box-title">Current temperatures</h3>
                     </div>
                     <div class="box-body">
-                        <div class="row" v-if="online">
+                        <div class="row" v-if="online && lastTemp">
                             <div class="col-lg-6">
                                 <div class="description-block border-right">
                                     <span v-html="fridgePercOffHtml"></span>
