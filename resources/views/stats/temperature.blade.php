@@ -107,7 +107,7 @@
             'data': {
                 'chart': null,
                 'dailyChart': null,
-                'lastTemp': '',
+                'lastTemp': null,
                 'dailyTemps': [],
                 'activeProfile': '',
                 'barrelPercOff': '',
