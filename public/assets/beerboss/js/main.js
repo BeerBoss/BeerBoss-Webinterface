@@ -40,7 +40,7 @@ var sidebar = new Vue({
             return 'Online <i class="fa fa-circle text-success"></i>';
         },
         online(){
-            return (moment().diff(moment(this.connInfo.updated_at), 'seconds') <= 15)
+            return this.connInfo !== '' && moment().diff(moment(this.connInfo.updated_at), 'seconds') <= 15;
         },
         activeProfilePart(){
 

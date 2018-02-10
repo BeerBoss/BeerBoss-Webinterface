@@ -71,8 +71,6 @@
                     </div>
                     <div class="pull-left info">
                         <p>{{Auth::user()->name}}</p>
-                        <!-- Status -->
-                        <i class="fa fa-envelope"></i> {{Auth::user()->email}}
                     </div>
                 </div>
 

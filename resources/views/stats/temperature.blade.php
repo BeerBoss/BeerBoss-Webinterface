@@ -166,7 +166,7 @@
                                     xAxes: [{
                                         scaleLabel: {
                                             display: true,
-                                            labelString: 'Time in seconds',
+                                            labelString: 'Time',
                                         }
                                     }]
                                 }
@@ -182,9 +182,9 @@
                     if(sidebar.activeProfile){
                         var desiredTemp = +sidebar.activeProfilePart.desiredTemp;
                         var temp = +this.lastTemp.barrelTemp;
-                        this.barrelPercOff = Math.round(((temp-desiredTemp)/((temp+desiredTemp)/2))*10000)/100;
+                        this.barrelPercOff = Math.round(((temp-desiredTemp)/desiredTemp)*10000)/100;
                         temp = +this.lastTemp.fridgeTemp;
-                        this.fridgePercOff = Math.round(((temp-desiredTemp)/((temp+desiredTemp)/2))*10000)/100;
+                        this.fridgePercOff = Math.round(((temp-desiredTemp)/desiredTemp)*10000)/100;
                     }
 
                 },
@@ -231,7 +231,7 @@
                                 xAxes: [{
                                     scaleLabel: {
                                         display: true,
-                                        labelString: 'Time in seconds',
+                                        labelString: 'Time',
                                     }
                                 }]
                             }
@@ -273,17 +273,17 @@
                     return biggest;
                 },
                 minFridgeTemp(){
-                    var smallest = 999;
+                    var smallest = this.dailyTemps[0].fridgeTemp;
                     this.dailyTemps.map(function(x){smallest = Math.min(smallest, +x.fridgeTemp)});
                     return smallest;
                 },
                 minBarrelTemp(){
-                    var smallest = 999;
+                    var smallest = this.dailyTemps[0].barrelTemp;
                     this.dailyTemps.map(function(x){smallest = Math.min(smallest, +x.barrelTemp)});
                     return smallest;
                 },
                 online(){
-                    return (moment().diff(moment(sidebar.connInfo.updated_at), 'seconds') <= 15)
+                    return sidebar.connInfo !== '' && moment().diff(moment(sidebar.connInfo.updated_at), 'seconds') <= 15;
                 },
             },
             mounted(){
